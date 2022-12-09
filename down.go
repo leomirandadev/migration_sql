@@ -15,7 +15,7 @@ func execDown(dir, driver, connection string) {
 		log.Fatal(err)
 	}
 
-	query, err := file.Read(migration + ".sql")
+	query, err := file.Read(dir+"/"+migration+".sql", "down")
 	if err != nil {
 		log.Fatal(err)
 	}

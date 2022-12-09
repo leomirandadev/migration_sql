@@ -23,7 +23,7 @@ func New(driver, connection string) IDatabase {
 }
 
 func (d *implDatabase) GetLatestMigration() (string, error) {
-	return "", nil
+	return "1670612283_data", nil
 }
 
 func (d *implDatabase) GetAllMigrations() (map[string]bool, error) {

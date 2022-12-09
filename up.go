@@ -24,19 +24,19 @@ func execUp(dir, driver, connection string) {
 
 	var newMigrations []string = make([]string, 0, len(files)-len(migrations))
 	for _, file := range files {
-		filename := strings.Split(file.Name(), ".")[0]
-		if !migrations[filename] {
-			newMigrations = append(newMigrations, filename)
+		migration := strings.Split(file.Name(), ".")[0]
+		if !migrations[migration] {
+			newMigrations = append(newMigrations, migration)
 		}
 	}
 
-	for _, filename := range newMigrations {
-		query, err := file.Read(filename)
+	for _, migration := range newMigrations {
+		query, err := file.Read(dir+"/"+migration+".sql", "up")
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		if err := db.RunMigration(filename, query); err != nil {
+		if err := db.RunMigration(migration, query); err != nil {
 			log.Fatal(err)
 		}
 	}
