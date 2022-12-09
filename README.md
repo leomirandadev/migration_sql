@@ -1,5 +1,9 @@
 # MIGRATION SQL
 
+Support following SQL Databases:
+- `mysql`
+- `postgres`
+
 ## CREATE MIGRATION
 ```shell
     $ migration_sql create data2
