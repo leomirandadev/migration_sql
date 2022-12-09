@@ -3,8 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/leomirandadev/migration_sql/cli"
-	"github.com/leomirandadev/migration_sql/file"
+	"github.com/leomirandadev/migration_sql/internal/cli"
 )
 
 func main() {
@@ -17,33 +16,9 @@ func main() {
 	case "create":
 		execCreate(args.Dir, args.Filename)
 	case "up":
-		execUp()
+		execUp(args.Dir, args.Driver, args.Connection)
 	case "down":
-		execDown()
+		execDown(args.Dir, args.Driver, args.Connection)
 	}
 
-}
-
-func execCreate(dir, filename string) {
-	err := file.Create(dir, filename)
-	if err != nil {
-		log.Fatal("It was not possible to create file")
-	}
-}
-
-func execUp() {
-	// create connection with database
-	// read migrations done
-	// find migration that does not run yet
-	// read new migrations file
-	// execute migrations
-	// store on database new migrations
-}
-
-func execDown() {
-	// create connection with database
-	// read the last migration
-	// read file
-	// execute rollback
-	// remove from database
 }

@@ -18,6 +18,11 @@ func Create(dir, filename string) error {
 	return nil
 }
 
+func Read(method string) (string, error) {
+
+	return "", nil
+}
+
 func createFilepath(dir, filename string) string {
 	return fmt.Sprintf("%s/%v_%s.sql", dir, time.Now().Unix(), filename)
 }
