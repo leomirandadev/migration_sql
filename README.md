@@ -1,8 +1,14 @@
 # MIGRATION SQL
 
+To install you have to just run:
+```shell
+$ go install github.com/leomirandadev/migration_sql/cmd@latest
+```
+
 Support following SQL Databases:
 - `mysql`
 - `postgres`
+
 
 ## CREATE MIGRATION
 ```shell
