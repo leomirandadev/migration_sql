@@ -12,29 +12,29 @@ Support following SQL Databases:
 
 ## Create
 ```shell
-    $ migration_sql create data2
+    $ migration_sql --create migration_name
 ```
 If you want to inform the dir, you can do:
 ```shell
-    $ migration_sql create data2 "./migrations_assets"
+    $ migration_sql --create migration_name --dir "./migrations_assets"
 ```
 
 ## Run
 ```shell
-    $ migration_sql up mysql "root:root@tcp(127.0.0.1:3306)/your_database_name"
+    $ migration_sql --up mysql --conn "root:root@tcp(127.0.0.1:3306)/your_database_name"
 ```
 
 If you want to inform the dir, you can do:
 ```shell
-    $ migration_sql up mysql "root:root@tcp(127.0.0.1:3306)/your_database_name" "./migrations_assets"
+    $ migration_sql --up mysql --conn "root:root@tcp(127.0.0.1:3306)/your_database_name" --dir "./migrations_assets"
 ```
 
 ## Rollback
 ```shell
-    $ migration_sql down mysql "root:root@tcp(127.0.0.1:3306)/your_database_name"
+    $ migration_sql --down mysql --conn "root:root@tcp(127.0.0.1:3306)/your_database_name"
 ```
 
 If you want to inform the dir, you can do:
 ```shell
-    $ migration_sql down mysql "root:root@tcp(127.0.0.1:3306)/your_database_name" "./migrations_assets"
+    $ migration_sql --down mysql --conn "root:root@tcp(127.0.0.1:3306)/your_database_name" --dir "./migrations_assets"
 ```

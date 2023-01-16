@@ -2,61 +2,73 @@ package cli
 
 import (
 	"errors"
-	"os"
+	"flag"
 )
 
+const DEFAULT_DRIVER = "mysql"
+const DEFAULT_DIR = "./"
+
 func HandleParams() (*Method, error) {
-	if len(os.Args) < 2 {
-		return nil, errors.New("Invalid query")
+
+	dirname := flag.String("dir", DEFAULT_DIR, "")
+	methodUp := flag.String("up", "", DEFAULT_DRIVER)
+	methodDown := flag.String("down", "", DEFAULT_DRIVER)
+	methodCreate := flag.String("create", "", "")
+	connection := flag.String("conn", "", "")
+
+	flag.Parse()
+
+	method, err := findTheMethodString(*methodCreate, *methodUp, *methodDown)
+	if err != nil {
+		return nil, err
 	}
 
-	var method string = os.Args[1]
+	if isMigrateMethod(method) && *connection == "" {
+		return nil, errors.New("connection not found")
+	}
 
+	return &Method{
+		Method:     method,
+		Driver:     getDriver(*methodUp, *methodDown),
+		Connection: *connection,
+		Filename:   *methodCreate,
+		Dir:        *dirname,
+	}, nil
+}
+
+func isMigrateMethod(method string) bool {
 	switch method {
-	case "create":
-		return getParamsFromCreate()
 	case "up":
-		return getParamsToMigrate()
+		return true
 	case "down":
-		return getParamsToMigrate()
+		return true
+	default:
+		return false
 	}
-
-	return nil, errors.New("No method identify")
 }
 
-// ./migration_sql create $(name)
-func getParamsFromCreate() (*Method, error) {
-	if len(os.Args) < 3 {
-		return nil, errors.New("Invalid \"create\" query")
+func findTheMethodString(create, up, down string) (string, error) {
+	if create == "" && !driversAllowed[up] && !driversAllowed[down] {
+		return "", errors.New("any method has found")
 	}
 
-	var dir string = "./"
-	if len(os.Args) >= 4 {
-		dir = os.Args[3]
+	method := "down"
+	if up != "" {
+		method = "up"
+	}
+	if create != "" {
+		method = "create"
 	}
 
-	return &Method{
-		Method:   os.Args[1],
-		Filename: os.Args[2],
-		Dir:      dir,
-	}, nil
+	return method, nil
 }
 
-// ./migration_sql $(method) $(driver) $(connection)
-func getParamsToMigrate() (*Method, error) {
-	if len(os.Args) < 4 {
-		return nil, errors.New("Invalid \"up\" query")
+func getDriver(methodUp, methodDown string) string {
+	if methodDown != "" {
+		return methodDown
 	}
-
-	var dir string = "./"
-	if len(os.Args) >= 5 {
-		dir = os.Args[4]
+	if methodUp != "" {
+		return methodUp
 	}
-
-	return &Method{
-		Method:     os.Args[1],
-		Driver:     os.Args[2],
-		Connection: os.Args[3],
-		Dir:        dir,
-	}, nil
+	return DEFAULT_DRIVER
 }
