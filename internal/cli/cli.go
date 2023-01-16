@@ -12,11 +12,11 @@ const DEFAULT_DIR = "./"
 
 func HandleParams() (*entities.Method, error) {
 
-	dirname := flag.String("dir", DEFAULT_DIR, "")
-	methodUp := flag.String("up", "", DEFAULT_DRIVER)
-	methodDown := flag.String("down", "", DEFAULT_DRIVER)
-	methodCreate := flag.String("create", "", "")
-	connection := flag.String("conn", "", "")
+	dirname := flag.String("dir", DEFAULT_DIR, "to inform your path where your files are")
+	methodUp := flag.String("up", "", "to inform your driver")
+	methodDown := flag.String("down", "", "to inform your driver")
+	methodCreate := flag.String("create", "", "to inform the name of migration that will be create")
+	connection := flag.String("conn", "", "to inform your database connection when you are use \"up\" or \"down\" method")
 
 	flag.Parse()
 
