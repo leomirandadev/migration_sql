@@ -16,7 +16,7 @@ Support following SQL Databases:
 ```
 If you want to inform the dir, you can do:
 ```shell
-    $ migration_sql --create migration_name --dir "./migrations_assets"
+    $ migration_sql --create migration_name --dir ./migrations_assets
 ```
 
 ## Run
@@ -26,7 +26,7 @@ If you want to inform the dir, you can do:
 
 If you want to inform the dir, you can do:
 ```shell
-    $ migration_sql --up mysql --conn "root:root@tcp(127.0.0.1:3306)/your_database_name" --dir "./migrations_assets"
+    $ migration_sql --up mysql --conn "root:root@tcp(127.0.0.1:3306)/your_database_name" --dir ./migrations_assets
 ```
 
 ## Rollback
@@ -36,5 +36,5 @@ If you want to inform the dir, you can do:
 
 If you want to inform the dir, you can do:
 ```shell
-    $ migration_sql --down mysql --conn "root:root@tcp(127.0.0.1:3306)/your_database_name" --dir "./migrations_assets"
+    $ migration_sql --down mysql --conn "root:root@tcp(127.0.0.1:3306)/your_database_name" --dir ./migrations_assets
 ```

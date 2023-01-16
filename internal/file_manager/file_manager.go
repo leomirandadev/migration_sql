@@ -1,4 +1,4 @@
-package file
+package file_manager
 
 import (
 	"bufio"
@@ -9,7 +9,18 @@ import (
 	"time"
 )
 
-func Create(dir, filename string) error {
+func New() IFileReader {
+	return fileReaderImpl{}
+}
+
+type IFileReader interface {
+	Create(dir, filename string) error
+	Read(filename, method string) (string, error)
+}
+
+type fileReaderImpl struct{}
+
+func (fileReaderImpl) Create(dir, filename string) error {
 	filepath := createFilepath(dir, filename)
 
 	file, err := os.Create(filepath)
@@ -21,7 +32,7 @@ func Create(dir, filename string) error {
 	return nil
 }
 
-func Read(filename, method string) (string, error) {
+func (fileReaderImpl) Read(filename, method string) (string, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return "", err

@@ -3,12 +3,14 @@ package cli
 import (
 	"errors"
 	"flag"
+
+	"github.com/leomirandadev/migration_sql/internal/entities"
 )
 
 const DEFAULT_DRIVER = "mysql"
 const DEFAULT_DIR = "./"
 
-func HandleParams() (*Method, error) {
+func HandleParams() (*entities.Method, error) {
 
 	dirname := flag.String("dir", DEFAULT_DIR, "")
 	methodUp := flag.String("up", "", DEFAULT_DRIVER)
@@ -27,7 +29,7 @@ func HandleParams() (*Method, error) {
 		return nil, errors.New("connection not found")
 	}
 
-	return &Method{
+	return &entities.Method{
 		Method:     method,
 		Driver:     getDriver(*methodUp, *methodDown),
 		Connection: *connection,

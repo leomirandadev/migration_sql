@@ -4,6 +4,8 @@ import (
 	"log"
 
 	"github.com/leomirandadev/migration_sql/internal/cli"
+	"github.com/leomirandadev/migration_sql/internal/file_manager"
+	"github.com/leomirandadev/migration_sql/internal/services"
 )
 
 func main() {
@@ -12,13 +14,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	switch args.Method {
-	case "create":
-		execCreate(args.Dir, args.Filename)
-	case "up":
-		execUp(args.Dir, args.Driver, args.Connection)
-	case "down":
-		execDown(args.Dir, args.Driver, args.Connection)
-	}
+	fileManager := file_manager.New()
+
+	srv := services.New(args, fileManager)
+
+	srv.Exec()
 
 }

@@ -6,7 +6,7 @@ import (
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
-	_ "github.com/lib/pq" // add this
+	_ "github.com/lib/pq"
 )
 
 type implDatabase struct {
@@ -15,7 +15,7 @@ type implDatabase struct {
 
 const TABLE_MIGRATIONS = "migration_sql_db"
 
-func New(driver, connection string) IDatabase {
+func NewSql(driver, connection string) IDatabase {
 	conn, err := sql.Open(driver, connection)
 	if err != nil {
 		log.Fatal(err)

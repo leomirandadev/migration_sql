@@ -1,4 +1,4 @@
-package cli
+package entities
 
 type Method struct {
 	Method     string
