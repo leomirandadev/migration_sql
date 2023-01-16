@@ -2,7 +2,7 @@
 
 To install you have to just run:
 ```shell
-$ go install github.com/leomirandadev/migration_sql/cmd/migration_sql@v1.0.1
+$ go install github.com/leomirandadev/migration_sql/cmd/migration_sql@latest
 ```
 
 Support following SQL Databases:
