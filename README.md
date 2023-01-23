@@ -10,6 +10,21 @@ Support following SQL Databases:
 - `postgres`
 
 
+
+# HOW IT WORKS
+
+If you are using some migration engine like goose, you probably see that when you are working with multiple branches, some migrations didn't run correctly. The reason is:
+
+<img src="./goose.png">
+
+In this repository, the migration execution it doesn't look just to filename, but we look to all migrations that was ran, and check if some file doesn't run. Like this:
+
+<img src="./migration_sql.png">
+
+
+
+# USAGE
+
 ## Create
 ```shell
     $ migration_sql --create migration_name
