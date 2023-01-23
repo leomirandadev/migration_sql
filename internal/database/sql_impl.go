@@ -46,6 +46,32 @@ func (d *implDatabase) GetLatestMigration() (string, error) {
 	return data, nil
 }
 
+func (d *implDatabase) GetLatestRunnerGroupMigrations() ([]string, error) {
+	data := make([]string, 0)
+
+	rows, err := d.conn.Query(`
+		SELECT migration FROM ` + TABLE_MIGRATIONS + ` 
+		WHERE runner_group = (
+			SELECT runner_group FROM ` + TABLE_MIGRATIONS + ` ORDER BY id DESC LIMIT 1
+		)
+	`)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var migrationName string
+		if err := rows.Scan(&migrationName); err != nil {
+			return nil, err
+		}
+
+		data = append(data, migrationName)
+	}
+
+	return data, nil
+}
+
 func (d *implDatabase) GetAllMigrations() (map[string]bool, error) {
 	migrations := make(map[string]bool)
 

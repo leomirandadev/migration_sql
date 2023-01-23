@@ -33,6 +33,8 @@ func (s *servicesImpl) Exec() {
 		s.up()
 	case "down":
 		s.down()
+	case "down-group":
+		s.downGroup()
 	}
 }
 
@@ -96,4 +98,27 @@ func (s *servicesImpl) down() {
 	}
 
 	log.Printf("Rollback on %s.sql migration", migration)
+}
+
+func (s *servicesImpl) downGroup() {
+	db := database.NewSql(s.method.Driver, s.method.Connection)
+
+	migrations, err := db.GetLatestRunnerGroupMigrations()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, migration := range migrations {
+		query, err := s.fileManager.Read(s.method.Dir+"/"+migration+".sql", "down")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if err := db.RunRollback(migration, query); err != nil {
+			log.Fatal(err)
+		}
+
+		log.Printf("Rollback on %s.sql migration", migration)
+	}
+
 }

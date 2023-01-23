@@ -15,12 +15,13 @@ func HandleParams() (*entities.Method, error) {
 	dirname := flag.String("dir", DEFAULT_DIR, "to inform your path where your files are")
 	methodUp := flag.String("up", "", "to inform your driver")
 	methodDown := flag.String("down", "", "to inform your driver")
+	methodDownGroup := flag.String("down-group", "", "down group is set to rollback the last group of migrations, to inform your driver")
 	methodCreate := flag.String("create", "", "to inform the name of migration that will be create")
 	connection := flag.String("conn", "", "to inform your database connection when you are use \"up\" or \"down\" method")
 
 	flag.Parse()
 
-	method, err := findTheMethodString(*methodCreate, *methodUp, *methodDown)
+	method, err := findTheMethodString(*methodCreate, *methodUp, *methodDown, *methodDownGroup)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +32,7 @@ func HandleParams() (*entities.Method, error) {
 
 	return &entities.Method{
 		Method:     method,
-		Driver:     getDriver(*methodUp, *methodDown),
+		Driver:     getDriver(*methodUp, *methodDown, *methodDownGroup),
 		Connection: *connection,
 		Filename:   *methodCreate,
 		Dir:        *dirname,
@@ -44,13 +45,15 @@ func isMigrateMethod(method string) bool {
 		return true
 	case "down":
 		return true
+	case "down-group":
+		return true
 	default:
 		return false
 	}
 }
 
-func findTheMethodString(create, up, down string) (string, error) {
-	if create == "" && !driversAllowed[up] && !driversAllowed[down] {
+func findTheMethodString(create, up, down, downGroup string) (string, error) {
+	if create == "" && !driversAllowed[up] && !driversAllowed[down] && !driversAllowed[downGroup] {
 		return "", errors.New("any method has found")
 	}
 
@@ -61,11 +64,17 @@ func findTheMethodString(create, up, down string) (string, error) {
 	if create != "" {
 		method = "create"
 	}
+	if downGroup != "" {
+		method = "down-group"
+	}
 
 	return method, nil
 }
 
-func getDriver(methodUp, methodDown string) string {
+func getDriver(methodUp, methodDown, methodDownGroup string) string {
+	if methodDownGroup != "" {
+		return methodDownGroup
+	}
 	if methodDown != "" {
 		return methodDown
 	}
