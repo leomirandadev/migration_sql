@@ -3,7 +3,6 @@ package services
 import (
 	"log"
 	"os"
-	"strings"
 
 	"github.com/leomirandadev/migration_sql/internal/database"
 	"github.com/leomirandadev/migration_sql/internal/entities"
@@ -59,19 +58,9 @@ func (s *servicesImpl) up() {
 		log.Fatal(err)
 	}
 
-	var newMigrations []string = make([]string, 0, len(files)-len(migrations))
-	for _, file := range files {
-		filenameSplited := strings.Split(file.Name(), ".")
-		if len(filenameSplited) != 2 {
-			continue
-		}
+	var newMigrations []string = getJustNewMigrations(files, migrations)
 
-		migration := filenameSplited[0]
-		ext := filenameSplited[1]
-		if ext == "sql" && !migrations[migration] {
-			newMigrations = append(newMigrations, migration)
-		}
-	}
+	runnerGroup := createRunnerGroupID()
 
 	for _, migration := range newMigrations {
 		query, err := s.fileManager.Read(s.method.Dir+"/"+migration+".sql", "up")
@@ -79,7 +68,7 @@ func (s *servicesImpl) up() {
 			log.Fatal(err)
 		}
 
-		if err := db.RunMigration(migration, query); err != nil {
+		if err := db.RunMigration(migration, query, runnerGroup); err != nil {
 			log.Fatal(err)
 		}
 

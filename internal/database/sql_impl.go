@@ -66,15 +66,15 @@ func (d *implDatabase) GetAllMigrations() (map[string]bool, error) {
 	return migrations, nil
 }
 
-func (d *implDatabase) RunMigration(name, query string) error {
+func (d *implDatabase) RunMigration(name, query, runnerGroup string) error {
 	_, err := d.conn.Exec(query)
 	if err != nil {
 		return err
 	}
 
 	_, err = d.conn.Exec(`
-		INSERT INTO `+TABLE_MIGRATIONS+` (migration) VALUES (?)
-	`, name)
+		INSERT INTO `+TABLE_MIGRATIONS+` (migration, runner_group) VALUES (?, ?)
+	`, name, runnerGroup)
 	if err != nil {
 		return err
 	}
@@ -102,6 +102,7 @@ func (d *implDatabase) createTableIfNotExists() error {
 		CREATE TABLE IF NOT EXISTS ` + TABLE_MIGRATIONS + ` (
 			id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 			migration VARCHAR(100),
+			runner_group VARCHAR(36),
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		)
 	`)
