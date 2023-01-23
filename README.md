@@ -53,3 +53,16 @@ If you want to inform the dir, you can do:
 ```shell
 migration_sql --down mysql --conn "root:root@tcp(127.0.0.1:3306)/your_database_name" --dir ./migrations_assets
 ```
+
+## Rollback Group
+
+With this command you can rollback the last migrations ran in one execution. So if in your last execution 3 migrations ran, you have just inform "--down-group" to rollback them.
+
+```shell
+migration_sql --down-group mysql --conn "root:root@tcp(127.0.0.1:3306)/your_database_name"
+```
+
+If you want to inform the dir, you can do:
+```shell
+migration_sql --down-group mysql --conn "root:root@tcp(127.0.0.1:3306)/your_database_name" --dir ./migrations_assets
+```
